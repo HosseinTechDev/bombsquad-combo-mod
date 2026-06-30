@@ -1,7 +1,8 @@
-import base64
+import base64,importlib.util,sys
 
 try:
  import bauiv1 as bui
+ import _babase,_bascenev1
  _dir=bui.app.env.python_directory_user
 except:
  import os
@@ -2005,5 +2006,16 @@ b24oKQogICAgICAgIF9wYXRjaF9wbGF5ZXJfc3BheigpCiAgICAgICAgX3BhdGNoX3BsYXllcl9zcGF6
 X2luaXQoKQo=
 """
 open(_f,"w",encoding="utf-8").write(base64.b64decode(_d).decode("utf-8"))
-print("ComboMod installed!")
-print("Path: "+_f)
+
+try:
+ _spec=importlib.util.spec_from_file_location("ComboMod",_f)
+ _mod=importlib.util.module_from_spec(_spec)
+ sys.modules["ComboMod"]=_mod
+ _spec.loader.exec_module(_mod)
+ if ".mainmenu" in str(_bascenev1.getactivity()):
+  _bascenev1.getactivity().on_transition_in()
+ _bascenev1.broadcastmessage(message="ComboMod Installed!",color=(0,1,0))
+ _babase.getsimplesound("achievement").play()
+except Exception as e:
+ _bascenev1.broadcastmessage(message="ComboMod Installed!",color=(0,1,0))
+ _babase.getsimplesound("achievement").play()
